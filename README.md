@@ -6,26 +6,30 @@ Este projeto é um **Dashboard Neural** desenvolvido por alunos do curso de **An
 
 A estrutura do projeto é a seguinte:
 ```perl
-my-dashboard-project/
+neuro-dashboard/
 │
 ├── backend/
 │   ├── venv/                     # Ambiente virtual
 │   ├── app.py                    # Seu arquivo principal do backend
 │   ├── requirements.txt          # Dependências do Python
-│   └── serviceAccountKey.json     # Arquivo da chave de serviço do Firebase
+│   └── .env                      # Insira o .env do backend aqui
 │
 ├── frontend/
-│   └── my-dashboard/              # Frontend do projeto
+│   └── my-dashboard/             # Frontend do projeto
+│       ├── node_modules          # Módulos
+│       ├── public                # Logos
+│       └── src                   # Pasta onde estão as telas do projeto, insira o .env do frontend aqui
 │
-├── .nvmrc                          # Arquivo para definir a versão do Node.js
-└── README.md                       # Documentação do projeto
+├── .gitignore                      
+├── .nvmrc                        # Arquivo para definir a versão do Node.js
+└── README.md                     # Documentação do projeto
 
 ```
 
 ## Tecnologias Utilizadas
 
 - **Frontend**: React
-- **Backend**: Python (Flask ou FastAPI)
+- **Backend**: Python (Flask)
 - **Banco de Dados**: Firebase
 - **Gerenciamento de Versões**: Node Version Manager (nvm) para Node.js
 - **Ambientes Virtuais**: venv para gerenciamento de dependências do Python
@@ -34,7 +38,7 @@ my-dashboard-project/
 
 ### Requisitos
 
-1. **Python**: Certifique-se de ter o Python 3.12.7 instalado.
+1. **Python**: Certifique-se de ter o Python instalado, a versão utilizada no projeto está dee acordo com a iniciação do venv.
 2. **Node.js**: Use a versão especificada no arquivo `.nvmrc` (18.17.0).
 3. **nvm**: Instale o Node Version Manager para facilitar a gestão de versões do Node.js.
 
@@ -43,8 +47,7 @@ my-dashboard-project/
 Clone o repositório:
 
    ```bash
-   git clone https://github.com/seuusuario/my-dashboard-project.git
-   cd my-dashboard-project
+   git clone https://github.com/mgpas/neuro-dashboard.git
    ```
 
 ### Configurar o Backend:
@@ -71,16 +74,16 @@ Clone o repositório:
 
 ### Configurar o Frontend:
 
+1. Use a versão do Node.js especificada:
+
+    ```bash
+    nvm use
+    ```
+
 1. Navegue até a pasta do frontend:
 
     ```bash
     cd ../frontend/my-dashboard
-    ```
-
-2. Use a versão do Node.js especificada:
-
-    ```bash
-    nvm use
     ```
 
 3. Instale as dependências do frontend:
@@ -93,15 +96,19 @@ Clone o repositório:
 ### Backend
 Para iniciar o backend, execute:
 
+    ```bash
     cd backend
     python app.py
-
+    ```
 
 ### Frontend
 Para iniciar o frontend, execute:
 
+    ```bash
     cd ../frontend/my-dashboard
     npm start
+    ```
 
 ### Dicas Finais
-- Lembre-se de substituir os placeholders (como `seuusuario`, `[Nome]`, e `[email@example.com]`) com as informações reais do seu projeto e equipe.
+- Lembre-se de inserir os arquivos .env no local indicado.
+- Para as requisições de dados funcionarem adequadamente os servidores do back e front devem estar funcionando. Divida ou então abra mais de um terminal.
