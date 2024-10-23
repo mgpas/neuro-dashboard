@@ -44,11 +44,61 @@ firebase_admin.initialize_app(cred)
 # Conexão com o Firestore
 db = firestore.client()
 
-# Rota para obter os dados do Firestore
-@app.route('/api/data', methods=['GET'])
-def get_data():
+# Rotas para obter os dados do Firestore
+@app.route('/api/users', methods=['GET'])
+def get_users_data():
     try:
-        data_ref = db.collection('dashboardData')
+        data_ref = db.collection('users')
+        docs = data_ref.stream()
+        data = {doc.id: doc.to_dict() for doc in docs}
+        return jsonify(data), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+@app.route('/api/activities', methods=['GET'])
+def get_activities_data():
+    try:
+        data_ref = db.collection('activities')
+        docs = data_ref.stream()
+        data = {doc.id: doc.to_dict() for doc in docs}
+        return jsonify(data), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+@app.route('/api/sessionAvatar', methods=['GET'])
+def get_avatar_data():
+    try:
+        data_ref = db.collection('sessionAvatar')
+        docs = data_ref.stream()
+        data = {doc.id: doc.to_dict() for doc in docs}
+        return jsonify(data), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+@app.route('/api/sessionMeditation', methods=['GET'])
+def get_meditation_data():
+    try:
+        data_ref = db.collection('sessionMeditation')
+        docs = data_ref.stream()
+        data = {doc.id: doc.to_dict() for doc in docs}
+        return jsonify(data), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+@app.route('/api/sessionQuestionary', methods=['GET'])
+def get_questionary_data():
+    try:
+        data_ref = db.collection('sessionQuestionary')
+        docs = data_ref.stream()
+        data = {doc.id: doc.to_dict() for doc in docs}
+        return jsonify(data), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+@app.route('/api/subscriptions', methods=['GET'])
+def get_subscriptions_data():
+    try:
+        data_ref = db.collection('subscriptions')
         docs = data_ref.stream()
         data = {doc.id: doc.to_dict() for doc in docs}
         return jsonify(data), 200
@@ -56,11 +106,11 @@ def get_data():
         return jsonify({"error": str(e)}), 500
 
 # Rota para adicionar novos dados ao Firestore
-@app.route('/api/data', methods=['POST'])
+@app.route('/users', methods=['POST'])
 def add_data():
     try:
         new_data = request.json
-        db.collection('dashboardData').add(new_data)
+        db.collection('users').add(new_data)
         return jsonify({"success": True}), 201
     except Exception as e:
         return jsonify({"error": str(e)}), 500
