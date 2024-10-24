@@ -10,6 +10,7 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import Divider from '@mui/material/Divider';
 import FormLabel from '@mui/material/FormLabel';
 import FormControl from '@mui/material/FormControl';
+import Link from '@mui/material/Link';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import Stack from '@mui/material/Stack';
@@ -21,6 +22,7 @@ import ColorModeSelect from '../shared-theme/ColorModeSelect';
 import IconButton from '@mui/material/IconButton';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
+import ForgotPassword from './ForgotPassword';
 
 const Card = styled(MuiCard)(({ theme }) => ({
   display: 'flex',
@@ -71,6 +73,7 @@ const Login = (props) => {
   const [error, setError] = useState('');
   const [showPassword, setShowPassword] = useState(false); // Estado para controlar a visibilidade da senha
   const navigate = useNavigate();
+  const [open, setOpen] = React.useState(false);
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -90,6 +93,14 @@ const Login = (props) => {
     } catch (err) {
       setError('Erro ao fazer login com Google: ' + err.message);
     }
+  };
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
   };
 
   const validateInputs = () => {
@@ -118,13 +129,27 @@ const Login = (props) => {
       <SignInContainer direction="column" justifyContent="space-between">
         <ColorModeSelect sx={{ position: 'fixed', top: '1rem', right: '1rem' }} />
         <Card variant="outlined">
-          <SitemarkIcon />
+        <Box
+        sx={{
+          display: 'flex',
+          alignItems: 'center',
+          mb: 4, // margem inferior para separar a logo dos campos de login
+        }}
+      >
+        <SitemarkIcon />
+        <Typography
+          variant="h3" // Define o tamanho do texto
+          sx={{ marginLeft: 1, }}
+        >
+          Neurobots
+        </Typography>
+      </Box>
           <Typography
             component="h1"
             variant="h4"
             sx={{ width: '100%', fontSize: 'clamp(2rem, 10vw, 2.15rem)' }}
           >
-            Sign in
+            Login
           </Typography>
           {error && <Typography color="error">{error}</Typography>}
           <Box
@@ -139,7 +164,7 @@ const Login = (props) => {
             }}
           >
             <FormControl>
-              <FormLabel htmlFor="email">Email</FormLabel>
+              <FormLabel htmlFor="email">E-mail</FormLabel>
               <TextField
                 error={emailError}
                 id="email"
@@ -154,8 +179,19 @@ const Login = (props) => {
               />
             </FormControl>
             <FormControl>
-              <FormLabel htmlFor="password">Password</FormLabel>
-              <Box sx={{ display: 'flex', alignItems: 'center' }}>
+            <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+              <FormLabel htmlFor="password">Senha</FormLabel>
+              <Link
+                  component="button"
+                  type="button"
+                  onClick={handleClickOpen}
+                  variant="body2"
+                  sx={{ alignSelf: 'baseline' }}
+                >
+                  Esqueceu sua senha?
+                </Link>
+              </Box>
+              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                 <TextField
                   error={passwordError}
                   name="password"
@@ -166,6 +202,7 @@ const Login = (props) => {
                   fullWidth
                   variant="outlined"
                   color={passwordError ? 'error' : 'primary'}
+                  sx={{ flexGrow: 1 }}
                 />
                 <IconButton
                   onClick={() => setShowPassword(!showPassword)} // Alterna a visibilidade
@@ -178,18 +215,19 @@ const Login = (props) => {
             </FormControl>
             <FormControlLabel
               control={<Checkbox value="remember" color="primary" />}
-              label="Remember me"
+              label="Lembre-se"
             />
+            <ForgotPassword open={open} handleClose={handleClose} />
             <Button
               type="submit"
               fullWidth
               variant="contained"
               onClick={validateInputs}
             >
-              Sign in
+              Login
             </Button>
           </Box>
-          <Divider>or</Divider>
+          <Divider>ou</Divider>
           <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
             <Button
               fullWidth
@@ -197,7 +235,7 @@ const Login = (props) => {
               startIcon={<GoogleIcon />}
               onClick={handleGoogleLogin} // Chama a função de login do Google
             >
-              Sign in with Google
+              Faça login com o Google
             </Button>
           </Box>
         </Card>
