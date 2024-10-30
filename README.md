@@ -15,10 +15,10 @@ neuro-dashboard/
 │   └── .env                      # Insira o .env do backend aqui
 │
 ├── frontend/
-│   └── my-dashboard/             # Frontend do projeto
+│   └── my-dashboard/             # Frontend do projeto, insira o .env do frontend aqui
 │       ├── node_modules          # Módulos
 │       ├── public                # Logos
-│       └── src                   # Pasta onde estão as telas do projeto, insira o .env do frontend aqui
+│       └── src                   # Pasta onde estão as telas do projeto
 │
 ├── .gitignore                      
 ├── .nvmrc                        # Arquivo para definir a versão do Node.js
@@ -96,18 +96,14 @@ Clone o repositório:
 ### Backend
 Para iniciar o backend, execute:
 
-    ```bash
     cd backend
     python app.py
-    ```
 
 ### Frontend
 Para iniciar o frontend, execute:
 
-    ```bash
-    cd ../frontend/my-dashboard
+    cd frontend/my-dashboard
     npm start
-    ```
 
 ### Dicas Finais
 - Lembre-se de inserir os arquivos .env no local indicado.

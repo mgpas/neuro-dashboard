@@ -6,7 +6,7 @@ frontend/my-dashboard/node_modules
 .pnp.js
 
 # dependências do Python (venv)
-venv/
+backend/venv/
 __pycache__/
 
 # arquivos do Python
