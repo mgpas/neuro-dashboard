@@ -32,10 +32,11 @@ export default function Dashboard(props) {
     try {
       const response = await axios.get('http://127.0.0.1:5000/api/data'); // Requisição para a API
       setData(response.data); // Salva os dados no estado
-      setLoading(false); // Indica que terminou de carregar
+      setError(null); // Reseta o erro se a requisição for bem-sucedida
     } catch (err) {
       setError('Erro ao buscar dados da API: ' + err.message);
-      setLoading(false);
+    } finally {
+      setLoading(false); // Garante que o carregamento será desativado independentemente do sucesso ou falha
     }
   };
 
@@ -43,14 +44,6 @@ export default function Dashboard(props) {
   useEffect(() => {
     fetchData();
   }, []); // O array vazio significa que a chamada será feita apenas uma vez, ao montar o componente
-
-  if (loading) {
-    return <p>Carregando dados...</p>;
-  }
-
-  if (error) {
-    return <p>{error}</p>;
-  }
 
   return (
     <AppTheme {...props} themeComponents={xThemeComponents}>
@@ -78,7 +71,12 @@ export default function Dashboard(props) {
             }}
           >
             <Header />
-            <MainGrid data={data} /> {/* Passa os dados para o MainGrid */}
+            {/* Mostra mensagem de erro dentro da área principal, se houver erro */}
+            {error ? (
+              <p>{error}</p>
+            ) : (
+              <MainGrid data={data} /> /* Passa os dados para o MainGrid */
+            )}
           </Stack>
         </Box>
       </Box>

@@ -133,13 +133,13 @@ const Login = (props) => {
         sx={{
           display: 'flex',
           alignItems: 'center',
-          mb: 4, // margem inferior para separar a logo dos campos de login
+          mb: 0.5,
         }}
       >
         <SitemarkIcon />
         <Typography
-          variant="h3" // Define o tamanho do texto
-          sx={{ marginLeft: 1, }}
+          variant="h3"
+          sx={{ marginLeft: 1 }}
         >
           Neurobots
         </Typography>
@@ -226,6 +226,18 @@ const Login = (props) => {
             >
               Login
             </Button>
+            <Typography sx={{ textAlign: 'center' }}>
+              Ainda não possui um cadastro?{' '}
+              <span>
+                <Link
+                  href="/material-ui/getting-started/templates/sign-in/"
+                  variant="body2"
+                  sx={{ alignSelf: 'center', fontWeight: 'bold' }}
+                >
+                  Cadastre-se
+                </Link>
+              </span>
+            </Typography>
           </Box>
           <Divider>ou</Divider>
           <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>

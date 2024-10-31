@@ -7,7 +7,6 @@ import MuiToolbar from '@mui/material/Toolbar';
 import { tabsClasses } from '@mui/material/Tabs';
 import Typography from '@mui/material/Typography';
 import MenuRoundedIcon from '@mui/icons-material/MenuRounded';
-import DashboardRoundedIcon from '@mui/icons-material/DashboardRounded';
 import SideMenuMobile from './SideMenuMobile';
 import MenuButton from './MenuButton';
 
@@ -57,10 +56,10 @@ export default function AppNavbar() {
             width: '100%',
           }}
         >
-          <Stack direction="row" spacing={1} sx={{ justifyContent: 'center' }}>
+          <Stack direction="row" spacing={1} sx={{ justifyContent: 'center', alignItems: 'center' }}>
             <CustomIcon />
             <Typography variant="h4" component="h1" sx={{ color: 'text.primary' }}>
-              Dashboard
+              Neurobots
             </Typography>
           </Stack>
           <MenuButton aria-label="menu" onClick={toggleDrawer(true)}>
@@ -77,23 +76,15 @@ export function CustomIcon() {
   return (
     <Box
       sx={{
-        width: '1.5rem',
-        height: '1.5rem',
-        bgcolor: 'black',
-        borderRadius: '999px',
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        alignSelf: 'center',
-        backgroundImage:
-          'linear-gradient(135deg, hsl(210, 98%, 60%) 0%, hsl(210, 100%, 35%) 100%)',
-        color: 'hsla(210, 100%, 95%, 0.9)',
-        border: '1px solid',
-        borderColor: 'hsl(210, 100%, 55%)',
-        boxShadow: 'inset 0 2px 5px rgba(255, 255, 255, 0.3)',
+        width: '3rem',
+        height: '3rem',
       }}
     >
-      <DashboardRoundedIcon color="inherit" sx={{ fontSize: '1rem' }} />
+    <img
+    src="https://neurobots.com.br/wp-content/uploads/2023/02/cropped-logo-neurobots.png"
+    alt="Neurobots Icon"
+    style={{ height: '100%', width: '100%' }}
+  />
     </Box>
   );
 }
