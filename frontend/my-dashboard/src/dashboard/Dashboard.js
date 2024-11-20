@@ -26,11 +26,12 @@ export default function Dashboard(props) {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [selectedMenu, setSelectedMenu] = useState('Engajamento');
 
   // Função para buscar dados da API
   const fetchData = async () => {
     try {
-      const response = await axios.get('http://127.0.0.1:5000/api/data'); // Requisição para a API
+      const response = await axios.get('http://127.0.0.1:5000/api/users'); // Requisição para a API
       setData(response.data); // Salva os dados no estado
       setError(null); // Reseta o erro se a requisição for bem-sucedida
     } catch (err) {
@@ -49,8 +50,8 @@ export default function Dashboard(props) {
     <AppTheme {...props} themeComponents={xThemeComponents}>
       <CssBaseline enableColorScheme />
       <Box sx={{ display: 'flex' }}>
-        <SideMenu />
-        <AppNavbar />
+      <SideMenu selectedMenu={selectedMenu} onSelectMenu={setSelectedMenu} />
+        <AppNavbar selectedMenu={selectedMenu} onSelectMenu={setSelectedMenu}/>
         <Box
           component="main"
           sx={(theme) => ({
@@ -70,12 +71,12 @@ export default function Dashboard(props) {
               mt: { xs: 8, md: 0 },
             }}
           >
-            <Header />
+            <Header selectedMenu={selectedMenu} />
             {/* Mostra mensagem de erro dentro da área principal, se houver erro */}
             {error ? (
               <p>{error}</p>
             ) : (
-              <MainGrid data={data} /> /* Passa os dados para o MainGrid */
+              <MainGrid selectedMenu={selectedMenu} /> /* Passa os dados para o MainGrid */
             )}
           </Stack>
         </Box>

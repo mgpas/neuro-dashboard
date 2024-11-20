@@ -24,15 +24,16 @@ const Drawer = styled(MuiDrawer)({
   },
 });
 
-export default function SideMenu() {
+export default function SideMenu({ selectedMenu, onSelectMenu }) {
   const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true); // Estado de carregamento
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((currentUser) => {
       if (currentUser) {
         setUser({
-          name: currentUser.displayName || 'Usuário',
-          avatar: currentUser.photoURL || '/static/images/avatar/placeholder.jpg', // URL da foto ou placeholder
+          name: currentUser.name || 'Usuário',
+          avatar: currentUser.image_url || '/static/images/avatar/placeholder.jpg', // URL da foto ou placeholder
         });
       } else {
         setUser(null); // Caso o usuário não esteja logado
@@ -82,7 +83,7 @@ export default function SideMenu() {
           Neurobots
         </Typography>
       </Stack>
-      <MenuContent />
+      <MenuContent selectedMenu={selectedMenu} onSelectMenu={onSelectMenu} />
       <Stack
         direction="row"
         sx={{
@@ -93,17 +94,23 @@ export default function SideMenu() {
           borderColor: 'divider',
         }}
       >
-        <Avatar
-          sizes="small"
-          alt={user?.name || 'Usuário'}
-          src={user?.avatar}
-          sx={{ width: 36, height: 36 }}
-        />
-        <Box sx={{ mr: 'auto' }}>
-          <Typography variant="body2" sx={{ fontWeight: 500, lineHeight: '16px' }}>
-            {user?.name || 'Usuário'}
-          </Typography>
-        </Box>
+        {loading ? ( // Renderiza um carregador enquanto os dados estão sendo buscados
+          <Avatar sx={{ width: 36, height: 36 }} />
+        ) : (
+          <>
+            <Avatar
+              sizes="small"
+              alt={user?.name || 'Usuário'}
+              src={user?.avatar || '/static/images/avatar/placeholder.jpg'}
+              sx={{ width: 36, height: 36 }}
+            />
+            <Box sx={{ mr: 'auto' }}>
+              <Typography variant="body2" sx={{ fontWeight: 500, lineHeight: '16px' }}>
+                {user?.name || 'Usuário'}
+              </Typography>
+            </Box>
+          </>
+        )}
       </Stack>
       <Stack sx={{ p: 1 }}>
         <Button variant="outlined" startIcon={<LogoutRoundedIcon />} onClick={handleLogout}>
