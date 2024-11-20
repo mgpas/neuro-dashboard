@@ -698,7 +698,7 @@ def calculate_global_performance():
     - stressValue
     - focusValue
     - controlValue
-    
+
     Fórmula:
     PerformanceGlobal = (brainActivity + gonogo_game_final_mean + stressValue + focusValue + controlValue) / 5
 
@@ -713,15 +713,18 @@ def calculate_global_performance():
         focus_values = calculate_focus_value()  # focus_values (usando média como exemplo)
         control_values = calculate_control_value()  # control_values (usando média como exemplo)
 
-        # Obtendo os valores específicos
-        brain_activity_mean = brain_activity.get("final_mean", 0)
-        gonogo_final_mean = gonogo_metrics.get("gonogo_game_final_mean", 0)
-        stress_mean = sum(stress_values["stress_values"]) / len(stress_values["stress_values"]) if stress_values["stress_values"] else 0
-        focus_mean = sum(focus_values["focus_values"]) / len(focus_values["focus_values"]) if focus_values["focus_values"] else 0
-        control_mean = sum(control_values["control_values"]) / len(control_values["control_values"]) if control_values["control_values"] else 0
+        # Obtendo os valores específicos sem valores padrão
+        brain_activity_mean = brain_activity["final_mean"]
+        gonogo_final_mean = gonogo_metrics["gonogo_game_final_mean"]
+        stress_mean = sum(stress_values["stress_values"]) / len(stress_values["stress_values"])
+        focus_mean = sum(focus_values["focus_values"]) / len(focus_values["focus_values"])
+        control_mean = sum(control_values["control_values"]) / len(control_values["control_values"])
 
         # Calculando o PerformanceGlobal
         performance_global = (brain_activity_mean + gonogo_final_mean + stress_mean + focus_mean + control_mean) / 5
+
+        # Limitando o resultado a duas casas decimais
+        performance_global = round(performance_global, 2)
 
         # Print para depuração
         print(f"PerformanceGlobal: {performance_global}")
@@ -730,9 +733,16 @@ def calculate_global_performance():
             "PerformanceGlobal": performance_global
         }
 
+    except KeyError as e:
+        print(f"Erro: Chave ausente nos dados: {e}")
+        return None
+    except ZeroDivisionError as e:
+        print(f"Erro: Tentativa de divisão por zero: {e}")
+        return None
     except Exception as e:
         print(f"Erro ao calcular o PerformanceGlobal: {e}")
         return None
+
 
 @app.route('/api/global-performance', methods=['GET'])
 def get_global_performance():
@@ -745,6 +755,8 @@ def get_global_performance():
         return jsonify(result)  # Retorna o resultado como um JSON
     else:
         return jsonify({"error": "Erro ao calcular o PerformanceGlobal."}), 500
+
+
 
 # ////////////////////////////////
 
