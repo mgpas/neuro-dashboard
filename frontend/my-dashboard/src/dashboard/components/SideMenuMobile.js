@@ -12,7 +12,7 @@ import { auth } from '../../firebase';
 
 import MenuContent from './MenuContent';
 
-function SideMenuMobile({ open, toggleDrawer }) {
+function SideMenuMobile({ open, toggleDrawer, selectedMenu, onSelectMenu }) {
   const [user, setUser] = useState(null);
 
   useEffect(() => {
@@ -78,7 +78,7 @@ function SideMenuMobile({ open, toggleDrawer }) {
         </Stack>
         <Divider />
         <Stack sx={{ flexGrow: 1 }}>
-          <MenuContent />
+        <MenuContent selectedMenu={selectedMenu} onSelectMenu={onSelectMenu} />
           <Divider />
         </Stack>
         <Stack sx={{ p: 2 }}>

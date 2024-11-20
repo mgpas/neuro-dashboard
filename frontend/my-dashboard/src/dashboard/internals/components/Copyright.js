@@ -15,7 +15,7 @@ export default function Copyright(props) {
         ...(Array.isArray(props.sx) ? props.sx : [props.sx]),
       ]}
     >
-      {'Copyright © Design by'}
+      {'Copyright © Design by '}
       <Link color="inherit" href="https://mui.com/">
         Sitemark
       </Link>{' '}
