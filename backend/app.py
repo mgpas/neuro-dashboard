@@ -339,7 +339,7 @@ def calculate_corrected_percentages():
     final_percentage = (100 - new_percentage) / 100
 
     Retorna:
-    dict: Contendo as porcentagens corrigidas para cada métrica.
+    dict: Contendo as porcentagens corrigidas para cada métrica com duas casas decimais.
     """
     try:
         # Obtendo os z-scores calculados pela função `calculate_game_zscores`
@@ -357,8 +357,8 @@ def calculate_corrected_percentages():
             new_percentage = (zscore * 25) + 50
             return (100 - new_percentage) / 100
 
-        inattention_final_percentage = corrected_percentage(go_zscore)
-        hyperactive_final_percentage = corrected_percentage(nogo_zscore)
+        inattention_final_percentage = round(corrected_percentage(go_zscore) * 100, 2)
+        hyperactive_final_percentage = round(corrected_percentage(nogo_zscore) * 100, 2)
         reactiontime_final_percentage = corrected_percentage(reaction_time_zscore)
 
         return {
