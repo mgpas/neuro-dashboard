@@ -356,9 +356,11 @@ def calculate_corrected_percentages():
         def corrected_percentage(zscore):
             new_percentage = (zscore * 25) + 50
             return (100 - new_percentage) / 100
-
-        inattention_final_percentage = round(corrected_percentage(go_zscore) * 100, 2)
-        hyperactive_final_percentage = round(corrected_percentage(nogo_zscore) * 100, 2)
+        
+        inattention_final_percentage = corrected_percentage(go_zscore)
+        hyperactive_final_percentage = corrected_percentage(nogo_zscore)
+        # inattention_final_percentage = round(corrected_percentage(go_zscore) * 100, 2)
+        # hyperactive_final_percentage = round(corrected_percentage(nogo_zscore) * 100, 2)
         reactiontime_final_percentage = corrected_percentage(reaction_time_zscore)
 
         return {
