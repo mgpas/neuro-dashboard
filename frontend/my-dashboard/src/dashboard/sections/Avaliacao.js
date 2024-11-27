@@ -52,9 +52,9 @@ export default function Avaliacao() {
 
         // Fetch para Focus, Stress e Control
         const [focusResponse, stressResponse, controlResponse] = await Promise.all([
-          fetch('http://127.0.0.1:5000/api/focus-value'),
-          fetch('http://127.0.0.1:5000/api/stress-value'),
-          fetch('http://127.0.0.1:5000/api/control-value'),
+          fetch('https://neuro-dashboard.onrender.com/api/focus-value'),
+          fetch('https://neuro-dashboard.onrender.com/api/stress-value'),
+          fetch('https://neuro-dashboard.onrender.com/api/control-value'),
         ]);
         const [focusData, stressData, controlData] = await Promise.all([
           focusResponse.json(),
@@ -66,7 +66,7 @@ export default function Avaliacao() {
         setControlValue(controlData.control_values.reduce((sum, val) => sum + val, 0) / controlData.control_values.length);
 
         // Fetch para Teste de Performance
-        const performanceTestResponse = await fetch('http://127.0.0.1:5000/api/corrected-percentages');
+        const performanceTestResponse = await fetch('https://neuro-dashboard.onrender.com/api/corrected-percentages');
         const performanceTestData = await performanceTestResponse.json();
         setPerformanceTest(performanceTestData);
       } catch (error) {

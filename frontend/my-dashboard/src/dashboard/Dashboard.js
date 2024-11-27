@@ -31,7 +31,7 @@ export default function Dashboard(props) {
   // Função para buscar dados da API
   const fetchData = async () => {
     try {
-      const response = await axios.get('http://127.0.0.1:5000/api/users'); // Requisição para a API
+      const response = await axios.get('https://neuro-dashboard.onrender.com/api/users'); // Requisição para a API
       setData(response.data); // Salva os dados no estado
       setError(null); // Reseta o erro se a requisição for bem-sucedida
     } catch (err) {

@@ -18,7 +18,7 @@ export default function Engajamento() {
         let combinedDuration = 0; // Variável para armazenar a soma das durações
 
         // Fetch sessionAvatar
-        const avatarResponse = await fetch('https://neuro-dashboard.onrender.com//api/sessionAvatar');
+        const avatarResponse = await fetch('https://neuro-dashboard.onrender.com/api/sessionAvatar');
         const sessionAvatars = await avatarResponse.json();
 
         // Process sessionAvatar data
