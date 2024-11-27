@@ -1,6 +1,6 @@
-# Dashboard Neural
+# Neuro Dashboard
 
-Este projeto é um **Dashboard Neural** desenvolvido por alunos do curso de **Análise e Desenvolvimento de Sistemas**, em parceria com uma empresa do setor. O objetivo deste dashboard é fornecer uma interface intuitiva e interativa para visualização e análise de dados relacionados a modelos neurais, permitindo que usuários tomem decisões informadas com base em insights derivados dos dados.
+Este projeto é um **Neuro Dashboard** desenvolvido por alunos do curso de **Análise e Desenvolvimento de Sistemas**, em parceria com uma empresa do setor. O objetivo deste dashboard é fornecer uma interface intuitiva e interativa para visualização e análise de dados relacionados a modelos neurais, permitindo que usuários tomem decisões informadas com base em insights derivados dos dados.
 
 ## Estrutura do Projeto
 
