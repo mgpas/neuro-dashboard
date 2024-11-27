@@ -13,7 +13,7 @@ export default function MainGrid({ selectedMenu }) {
         return <Avaliacao />;
       case 'Sessões: Neuroavatar':
         return <Neuroavatar />;
-      case 'Sessões: Neurodisplay':
+      case 'Sessões: Mindfullness':
         return <Neurodisplay />;
       default:
         return <p>Selecione uma opção no menu</p>;
