@@ -81,37 +81,31 @@ export default function Neurodisplay() {
       ) : (
         <>
           {/* Boxes lado a lado */}
-          <Grid container spacing={2} sx={{ mb: 2 }}>
-            <Grid item xs={12} sm={6} md={4}>
-              <Box sx={{ p: 2, boxShadow: 2, borderRadius: 2, backgroundColor: 'background.paper' }}>
+          <Grid
+            container
+            spacing={1}
+            columns={12}
+            sx={{ mb: (theme) => theme.spacing(2), height: '100vh', display: 'flex', justifyContent: 'flex-start', flexDirection: 'column' }}
+          >
+            <Grid container item xs={1} sm={4} lg={6} justifyContent="center" alignContent="space-between" sx={{ display: 'flex' }}>
+            <Box sx={{ p: 2, boxShadow: 2, borderRadius: 2, backgroundColor: 'background.paper', flexGrow: 1 }}>
                 <Typography variant="h6">Média de Atividade Cerebral</Typography>
                 <Typography variant="h4" sx={{ color: 'primary.main', fontWeight: 600 }}>
                   {AtividadeMedia}%
                 </Typography>
               </Box>
-            </Grid>
-            <Grid item xs={12} sm={6} md={4}>
-              <Box sx={{ p: 2, boxShadow: 2, borderRadius: 2, backgroundColor: 'background.paper' }}>
+
+              <Box sx={{ p: 2, boxShadow: 2, borderRadius: 2, backgroundColor: 'background.paper', flexGrow: 1 }}>
                 <Typography variant="h6">Duração Total</Typography>
                 <Typography variant="h4" sx={{ color: 'primary.main', fontWeight: 600 }}>
                   {totalSessionDuration.hours}h {totalSessionDuration.minutes}m
                 </Typography>
               </Box>
             </Grid>
-          </Grid>
 
           {/* Gráfico abaixo dos boxes */}
-          <Box
-            sx={{
-              p: 4,
-              boxShadow: 2,
-              borderRadius: 2,
-              backgroundColor: 'background.paper',
-              flexGrow: 1,
-              width: '100%',
-              maxWidth: { sm: '100%', md: '1700px' },
-            }}
-          >
+          <Grid container item xs={12}>
+              <Box sx={{ p: 4, boxShadow: 2, borderRadius: 2, backgroundColor: 'background.paper', flexGrow: 1 }}>
             <Typography variant="h6" sx={{ mb: 2 }}>
               Evolução da atividade cerebral
             </Typography>
@@ -145,6 +139,8 @@ export default function Neurodisplay() {
               grid={{ horizontal: true }}
             />
           </Box>
+          </Grid>
+          </Grid>
 
           {/* Copyright Section */}
           <Copyright sx={{ mt: 4 }} />
