@@ -14,7 +14,7 @@ const mainListItems = [
   { text: 'Engajamento', icon: <BarChartIcon /> },
   { text: 'Avaliação', icon: <PieChartIcon /> },
   { text: 'Sessões: Neuroavatar', icon: <PersonIcon /> },
-  { text: 'Sessões: Neurodisplay', icon: <PsychologyIcon /> },
+  { text: 'Sessões: Mindfullness', icon: <PsychologyIcon /> },
 ];
 
 export default function MenuContent({ selectedMenu, onSelectMenu }) {

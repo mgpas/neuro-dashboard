@@ -12,75 +12,63 @@ export default function Avaliacao() {
   const [focusValue, setFocusValue] = useState(null);
   const [stressValue, setStressValue] = useState(null);
   const [controlValue, setControlValue] = useState(null);
+  const [performanceTest, setPerformanceTest] = useState(null);
 
   useEffect(() => {
-    // Função para buscar os dados da API
     const fetchData = async () => {
       try {
         // Fetch para PerformanceGlobal
         const performanceResponse = await fetch('http://127.0.0.1:5000/api/global-performance');
         const performanceData = await performanceResponse.json();
-
-        if (performanceData.PerformanceGlobal) {
-          setPerformanceGlobal(performanceData.PerformanceGlobal);
-        } else {
-          console.error('PerformanceGlobal não encontrada nos dados');
-        }
+        setPerformanceGlobal(performanceData.PerformanceGlobal || null);
 
         // Fetch para sessionQuestionary
         const sessionResponse = await fetch('http://127.0.0.1:5000/api/sessionQuestionary');
         const sessionData = await sessionResponse.json();
 
-        console.log('Session API Response:', sessionData); // Depuração
-
-        // Objeto para agrupar os valores por mês
         const monthlyData = {};
-
-        // Iterar sobre os dados da sessão
         Object.values(sessionData).forEach((session) => {
           if (session.updated_at && session.form_answer) {
             const date = new Date(session.updated_at);
             const month = date.toLocaleString('default', { month: 'long' });
 
-            // Inicializar arrays mensais, se necessário
             if (!monthlyData[month]) {
               monthlyData[month] = { stressValues: [], focusValues: [], controlValues: [] };
             }
 
-            // Adicionar os valores para cálculo posterior
             monthlyData[month].stressValues.push(session.form_answer[0]);
             monthlyData[month].focusValues.push(session.form_answer[1]);
             monthlyData[month].controlValues.push(session.form_answer[2]);
           }
         });
 
-        // Calcular as médias por mês
         const formattedData = Object.entries(monthlyData).map(([month, values]) => ({
           month,
           stressValue: values.stressValues.reduce((sum, val) => sum + val, 0) / values.stressValues.length,
           focusValue: values.focusValues.reduce((sum, val) => sum + val, 0) / values.focusValues.length,
           controlValue: values.controlValues.reduce((sum, val) => sum + val, 0) / values.controlValues.length,
         }));
-
         setChartData(formattedData);
 
-// Fetch para Focus, Stress e Control
-const [focusResponse, stressResponse, controlResponse] = await Promise.all([
-  fetch('http://127.0.0.1:5000/api/focus-value'),
-  fetch('http://127.0.0.1:5000/api/stress-value'),
-  fetch('http://127.0.0.1:5000/api/control-value')
-]);
+        // Fetch para Focus, Stress e Control
+        const [focusResponse, stressResponse, controlResponse] = await Promise.all([
+          fetch('http://127.0.0.1:5000/api/focus-value'),
+          fetch('http://127.0.0.1:5000/api/stress-value'),
+          fetch('http://127.0.0.1:5000/api/control-value'),
+        ]);
+        const [focusData, stressData, controlData] = await Promise.all([
+          focusResponse.json(),
+          stressResponse.json(),
+          controlResponse.json(),
+        ]);
+        setFocusValue(focusData.focus_values.reduce((sum, val) => sum + val, 0) / focusData.focus_values.length);
+        setStressValue(stressData.stress_values.reduce((sum, val) => sum + val, 0) / stressData.stress_values.length);
+        setControlValue(controlData.control_values.reduce((sum, val) => sum + val, 0) / controlData.control_values.length);
 
-const [focusData, stressData, controlData] = await Promise.all([
-  focusResponse.json(),
-  stressResponse.json(),
-  controlResponse.json()
-]);
-
-// Calcular a média dos valores de Focus, Stress e Control
-setFocusValue(focusData.focus_values.reduce((sum, val) => sum + val, 0) / focusData.focus_values.length);
-setStressValue(stressData.stress_values.reduce((sum, val) => sum + val, 0) / stressData.stress_values.length);
-setControlValue(controlData.control_values.reduce((sum, val) => sum + val, 0) / controlData.control_values.length);
+        // Fetch para Teste de Performance
+        const performanceTestResponse = await fetch('http://127.0.0.1:5000/api/corrected-percentages');
+        const performanceTestData = await performanceTestResponse.json();
+        setPerformanceTest(performanceTestData);
       } catch (error) {
         console.error('Erro ao buscar dados:', error);
       } finally {
@@ -91,25 +79,23 @@ setControlValue(controlData.control_values.reduce((sum, val) => sum + val, 0) / 
     fetchData();
   }, []);
 
-  // Preparar os dados para o gráfico
   const months = chartData.map((data) => data.month);
   const stressValues = chartData.map((data) => data.stressValue);
   const focusValues = chartData.map((data) => data.focusValue);
   const controlValues = chartData.map((data) => data.controlValue);
 
-return (
-  <Box sx={{ width: '100%', maxWidth: { sm: '100%', md: '1700px' }, textAlign: 'center' }}>
-    {/* Exibir carregamento enquanto busca dados */}
-    {loading ? (
-      <Typography variant="h6">Carregando...</Typography>
-    ) : (
-      <>
-        <Grid
-          container
-          spacing={1}
-          columns={12}
-          sx={{ mb: (theme) => theme.spacing(2), height: '100vh', display: 'flex', justifyContent: 'flex-start', flexDirection: 'column' }}
-        >
+  return (
+    <Box sx={{ width: '100%', maxWidth: { sm: '100%', md: '1700px' }, textAlign: 'center' }}>
+      {loading ? (
+        <Typography variant="h6">Carregando...</Typography>
+      ) : (
+        <>
+          <Grid
+            container
+            spacing={1}
+            columns={12}
+            sx={{ mb: (theme) => theme.spacing(2), height: '100vh', display: 'flex', justifyContent: 'flex-start', flexDirection: 'column' }}
+          >
           <Grid container item xs={12} alignContent="space-between" sx={{ display: 'flex' }}>
             {/* Box para Performance Global */}
             <Box
@@ -131,7 +117,7 @@ return (
                 {performanceGlobal}%
               </Typography>
             </Box>
-          </Grid>     
+          </Grid>              
 
         {/* Gráfico Avaliação por Mês */}
         <Grid container item xs={12} justifyContent="center" alignContent="space-between">
@@ -145,7 +131,7 @@ return (
     }}
   >
     <Typography variant="h6" sx={{ mb: 1 }}>
-      Avaliação por Mês
+      Evolução das habilidades
     </Typography>
     {chartData.length > 0 ? (
       <LineChart
@@ -172,23 +158,23 @@ return (
   </Box>
 </Grid>
 
-        <Copyright sx={{ mt: 4 }} />
-
-        {/* Boxes com as médias de Focus, Stress e Control */}
-<Grid container item xs={12} justifyContent="center" spacing={2}>
-  <Box 
-  sx={{
-    p: 2,
-    boxShadow: 2,
-    borderRadius: 2,
-    backgroundColor: 'background.paper',
-    display: 'flex',
-    alignItems: 'center',
-    flexDirection: 'column'
-  }}>
-        <Typography variant="h6" sx={{ mb: 1 }}>
-      Resumo de Habilidades
-    </Typography>
+ {/* Boxes com Resumo de Habilidades */}
+ <Grid container item xs={12} justifyContent="center" spacing={2}>
+              <Box
+                sx={{
+                  p: 2,
+                  boxShadow: 2,
+                  borderRadius: 2,
+                  backgroundColor: 'background.paper',
+                  display: 'flex',
+                  alignItems: 'center',
+                  flexDirection: 'column',
+                  flexGrow: 1,
+                }}
+              >
+                <Typography variant="h6" sx={{ mb: 1 }}>
+                  Resumo de Habilidades
+                </Typography>
     <Grid item>
                 <Box sx={{ p: 2, boxShadow: 2, borderRadius: 2, backgroundColor: 'background.default', width: '100%', mb: 2 }}>
                   <Typography variant="h7">Gerenciamento de Estresse</Typography>
@@ -216,7 +202,79 @@ return (
               </Box>
             </Grid>
 
+            {/* Seção Teste de Performance */}
+            <Grid container item xs={12} justifyContent="center" spacing={2}>
+              <Box
+                sx={{
+                  p: 2,
+                  boxShadow: 2,
+                  borderRadius: 2,
+                  backgroundColor: 'background.paper',
+                  display: 'flex',
+                  alignItems: 'center',
+                  flexDirection: 'column',
+                  flexGrow: 1,
+                }}
+              >
+                <Typography variant="h6" sx={{ mb: 1 }}>
+                  Teste de Performance
+                </Typography>
+                {performanceTest ? (
+                  <Grid container spacing={2}>
+                    <Grid item xs={12} sm={4}>
+                      <Box
+                        sx={{
+                          p: 2,
+                          boxShadow: 2,
+                          borderRadius: 2,
+                          backgroundColor: 'background.default',
+                        }}
+                      >
+                        <Typography variant="h7">Hiperatividade</Typography>
+                        <Typography variant="h4" sx={{ color: 'primary.main', fontWeight: 600 }}>
+                        {(performanceTest.hyperactive_final_percentage * 100).toFixed(2)}%
+                        </Typography>
+                      </Box>
+                    </Grid>
+                    <Grid item xs={12} sm={4}>
+                      <Box
+                        sx={{
+                          p: 2,
+                          boxShadow: 2,
+                          borderRadius: 2,
+                          backgroundColor: 'background.default',
+                        }}
+                      >
+                        <Typography variant="h7">Desatenção</Typography>
+                        <Typography variant="h4" sx={{ color: 'primary.main', fontWeight: 600 }}>
+                        {(performanceTest.inattention_final_percentage * 100).toFixed(2)}%
+                        </Typography>
+                      </Box>
+                    </Grid>
+                    <Grid item xs={12} sm={4}>
+                      <Box
+                        sx={{
+                          p: 2,
+                          boxShadow: 2,
+                          borderRadius: 2,
+                          backgroundColor: 'background.default',
+                        }}
+                      >
+                        <Typography variant="h7">Tempo de Reação</Typography>
+                        <Typography variant="h4" sx={{ color: 'primary.main', fontWeight: 600 }}>
+                          {performanceTest.reactiontime_final_percentage.toFixed(2)}s
+                        </Typography>
+                      </Box>
+                    </Grid>
+                  </Grid>
+                ) : (
+                  <Typography variant="body1">Nenhum dado disponível para o teste de performance.</Typography>
+                )}
+              </Box>
+            </Grid>
         </Grid>
+                  {/* Copyright Section */}
+                  <Copyright sx={{ mt: 4 }} />
       </>
     )}
   </Box>
