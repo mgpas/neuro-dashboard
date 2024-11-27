@@ -7,58 +7,84 @@ import Copyright from '../internals/components/Copyright';
 
 export default function Engajamento() {
   const [userCount, setUserCount] = useState(0);
-  const [totalSessionDuration, setTotalSessionDuration] = useState(0);
-  const [segmentData, setSegmentData] = useState([]);
+  const [totalSessionDuration, setTotalSessionDuration] = useState({ hours: 0, minutes: 0 });
+  const [avatarSegmentData, setAvatarSegmentData] = useState([]);
+  const [meditationCategoryData, setMeditationCategoryData] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Função para buscar os dados da API (coleção sessionAvatar)
     const fetchData = async () => {
       try {
-        const response = await fetch('http://127.0.0.1:5000/api/sessionAvatar'); // Altere a rota conforme necessário
-        const sessionAvatars = await response.json();
+        let combinedDuration = 0; // Variável para armazenar a soma das durações
 
-        // Verifique a estrutura dos dados recebidos
-        console.log(sessionAvatars);
+        // Fetch sessionAvatar
+        const avatarResponse = await fetch('http://127.0.0.1:5000/api/sessionAvatar');
+        const sessionAvatars = await avatarResponse.json();
 
-        // Usando Set para garantir que contamos avatar_id distintos
-        const userIds = new Set();
-        let totalDuration = 0; // Variável para somar todas as durações
-        const segmentDurations = {}; // Objeto para somar a duração por segmento
+        // Process sessionAvatar data
+        const avatarUserIds = new Set();
+        const avatarSegmentDurations = {};
 
-        // Itera sobre os objetos dentro da resposta
         for (const key in sessionAvatars) {
           if (sessionAvatars.hasOwnProperty(key)) {
             const session = sessionAvatars[key];
             if (session.user_id) {
-              userIds.add(session.user_id); // Adiciona o avatar_id ao Set para garantir que sejam únicos
+              avatarUserIds.add(session.user_id);
             }
             if (session.session_duration) {
-              totalDuration += session.session_duration; // Soma a duração de cada sessão
+              combinedDuration += session.session_duration; // Soma duração de avatar
             }
             if (session.segment) {
-              // Somar a duração para cada segmento
-              if (!segmentDurations[session.segment]) {
-                segmentDurations[session.segment] = 0;
+              if (!avatarSegmentDurations[session.segment]) {
+                avatarSegmentDurations[session.segment] = 0;
               }
-              segmentDurations[session.segment] += session.session_duration;
+              avatarSegmentDurations[session.segment] += session.session_duration;
             }
           }
         }
 
-        // Converte segmentDurations para um formato que o gráfico entenda
-        const chartData = Object.keys(segmentDurations).map(segment => ({
+        const avatarChartData = Object.keys(avatarSegmentDurations).map(segment => ({
           segment,
-          duration: segmentDurations[segment]
+          duration: avatarSegmentDurations[segment] / 60, // Convert to minutes
         }));
 
-        // Calcula as horas e minutos
-        const hours = Math.floor(totalDuration / 3600);
-        const minutes = Math.floor((totalDuration % 3600) / 60);
+        setUserCount(avatarUserIds.size);
+        setAvatarSegmentData(avatarChartData);
 
-        setUserCount(userIds.size); // O tamanho do Set será o número de avatar_ids distintos
-        setTotalSessionDuration({ hours, minutes }); // Armazena as horas e minutos
-        setSegmentData(chartData); // Atualiza os dados para o gráfico
+        // Fetch sessionMeditation
+        const meditationResponse = await fetch('http://127.0.0.1:5000/api/sessionMeditation');
+        const sessionMeditations = await meditationResponse.json();
+
+        // Process sessionMeditation data by "category"
+        const meditationCategoryDurations = {};
+
+        for (const key in sessionMeditations) {
+          if (sessionMeditations.hasOwnProperty(key)) {
+            const session = sessionMeditations[key];
+            if (session.session_duration) {
+              combinedDuration += session.session_duration; // Soma duração de meditação
+            }
+            if (session.category) {
+              if (!meditationCategoryDurations[session.category]) {
+                meditationCategoryDurations[session.category] = 0;
+              }
+              meditationCategoryDurations[session.category] += session.session_duration;
+            }
+          }
+        }
+
+        const meditationChartData = Object.keys(meditationCategoryDurations).map(category => ({
+          category,
+          duration: meditationCategoryDurations[category] / 60, // Convert to minutes
+        }));
+
+        setMeditationCategoryData(meditationChartData);
+
+        // Converte a duração combinada total para horas e minutos
+        const hours = Math.floor(combinedDuration / 3600);
+        const minutes = Math.floor((combinedDuration % 3600) / 60);
+
+        setTotalSessionDuration({ hours, minutes });
       } catch (error) {
         console.error('Erro ao buscar dados:', error);
       } finally {
@@ -69,13 +95,14 @@ export default function Engajamento() {
     fetchData();
   }, []);
 
-  // Preparando os dados para o gráfico
-  const segmentNames = segmentData.map(segment => segment.segment);
-  const durations = segmentData.map(segment => segment.duration);
+  const avatarSegmentNames = avatarSegmentData.map(data => data.segment);
+  const avatarDurations = avatarSegmentData.map(data => data.duration);
+
+  const meditationCategories = meditationCategoryData.map(data => data.category);
+  const meditationDurations = meditationCategoryData.map(data => data.duration);
 
   return (
     <Box sx={{ width: '100%', maxWidth: { sm: '100%', md: '1700px' }, textAlign: 'center' }}>
-      {/* Exibir carregamento enquanto busca dados */}
       {loading ? (
         <Typography variant="h6">Carregando...</Typography>
       ) : (
@@ -88,15 +115,7 @@ export default function Engajamento() {
           >
             <Grid container item xs={1} sm={4} lg={6} justifyContent="center" alignContent="space-between" sx={{ display: 'flex' }}>
               {/* Box 1: Participantes Ativos */}
-              <Box
-                sx={{
-                  p: 2,
-                  boxShadow: 2,
-                  borderRadius: 2,
-                  backgroundColor: 'background.paper',
-                  mb: 2, // Espaço entre os boxes
-                }}
-              >
+              <Box sx={{ p: 2, boxShadow: 2, borderRadius: 2, backgroundColor: 'background.paper', flexGrow: 1 }}>
                 <Typography variant="h6" sx={{ mb: 1 }}>
                   Participantes Ativos
                 </Typography>
@@ -106,14 +125,7 @@ export default function Engajamento() {
               </Box>
 
               {/* Box 2: Tempo de Uso Total */}
-              <Box
-                sx={{
-                  p: 2,
-                  boxShadow: 2,
-                  borderRadius: 2,
-                  backgroundColor: 'background.paper',
-                }}
-              >
+              <Box sx={{ p: 2, boxShadow: 2, borderRadius: 2, backgroundColor: 'background.paper', flexGrow: 1 }}>
                 <Typography variant="h6" sx={{ mb: 1 }}>
                   Tempo de Uso Total (h)
                 </Typography>
@@ -121,54 +133,101 @@ export default function Engajamento() {
                   {totalSessionDuration.hours}h {totalSessionDuration.minutes}m
                 </Typography>
               </Box>
-            </Grid>     
+            </Grid>
 
-          {/* Box 3: Gráfico de Barras abaixo das caixas */}
-          <Grid container item xs={12}>
-            <Box
-              sx={{
-                p: 4,
-                boxShadow: 2,
-                borderRadius: 2,
-                backgroundColor: 'background.paper',
-                flexGrow: 1,
-              }}
-            >
-              <Typography variant="h6" sx={{ mb: 2 }}>
-                Tempo de Uso - Neuroavatar
-              </Typography>
+            {/* Gráfico 1: Tempo de Uso - Neuroavatar */}
+            <Grid container item xs={12}>
+              <Box sx={{ p: 4, boxShadow: 2, borderRadius: 2, backgroundColor: 'background.paper', flexGrow: 1 }}>
+                <Typography variant="h6" sx={{ mb: 2 }}>
+                  Tempo de Uso - Neuroavatar
+                </Typography>
 
-              <BarChart
-                borderRadius={8}
-                xAxis={[
-                  {
-                    scaleType: 'band',
-                    categoryGapRatio: 0.5,
-                    data: segmentNames, // Usando os dados dinâmicos
-                  },
-                ]}
-                series={[
-                  {
-                    id: 'duration',
-                    label: 'Duração',
-                    data: durations, // Usando os dados dinâmicos de duração
-                    stack: 'A',
-                  },
-                ]}
-                height={250}
-                margin={{ left: 50, right: 10, top: 20, bottom: 20 }}
-                grid={{ horizontal: true }}
-                slotProps={{
-                  legend: {
-                    hidden: true,
-                  },
-                }}
-              />
-            </Box>
+                <BarChart
+                  borderRadius={8}
+                  xAxis={[
+                    {
+                      scaleType: 'band',
+                      categoryGapRatio: 0.5,
+                      data: avatarSegmentNames,
+                    },
+                  ]}
+                  yAxis={[
+                    {
+                      label: 'Duração (minutos)', // Label vertical para o eixo Y
+                      labelProps: {
+                        angle: -90, // Rotação vertical
+                        textAnchor: 'middle', // Centralizar o texto
+                      },
+                    },
+                  ]}         
+                  series={[
+                    {
+                      id: 'avatarDuration',
+                      label: 'Duração (minutos)',
+                      data: avatarDurations,
+                      stack: 'A',
+                    },
+                  ]}
+                  height={250}
+                  margin={{ left: 50, right: 10, top: 20, bottom: 20 }}
+                  grid={{ horizontal: true }}
+                  slotProps={{
+                    legend: {
+                      hidden: true,
+                    },
+                  }}
+                />
+              </Box>
+            </Grid>
+
+            {/* Gráfico 2: Tempo de Uso - Meditação */}
+            <Grid container item xs={12}>
+              <Box sx={{ p: 4, boxShadow: 2, borderRadius: 2, backgroundColor: 'background.paper', flexGrow: 1 }}>
+                <Typography variant="h6" sx={{ mb: 2 }}>
+                  Tempo de Uso - Mindfullness
+                </Typography>
+
+                <BarChart
+                  borderRadius={8}
+                  xAxis={[
+                    {
+                      scaleType: 'band',
+                      categoryGapRatio: 0.5,
+                      data: meditationCategories,
+                    },
+                  ]}
+                  yAxis={[
+                    {
+                      label: 'Duração (minutos)', 
+                      labelProps: {
+                        angle: -90, 
+                        textAnchor: 'middle',
+                      },
+                    },
+                  ]}
+                  series={[
+                    {
+                      id: 'meditationDuration',
+                      label: 'Duração (minutos)',
+                      data: meditationDurations,
+                      stack: 'B',
+                    },
+                  ]}
+                  height={250}
+                  margin={{ left: 50, right: 10, top: 20, bottom: 20 }}
+                  grid={{ horizontal: true }}
+                  slotProps={{
+                    legend: {
+                      hidden: true,
+                    },
+                  }}
+                />
+              </Box>
+            </Grid>
           </Grid>
 
+          {/* Copyright Section */}
           <Copyright sx={{ mt: 4 }} />
-          </Grid>
         </>
       )}
     </Box>
