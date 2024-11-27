@@ -19,7 +19,7 @@ export default function Neurodisplay() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch('http://127.0.0.1:5000/api/sessionMeditation');
+        const response = await fetch('https://neuro-dashboard.onrender.com/api/sessionMeditation');
         if (!response.ok) throw new Error(`Erro HTTP: ${response.status}`);
 
         let sessionMeditation;

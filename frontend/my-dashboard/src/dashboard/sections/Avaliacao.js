@@ -18,12 +18,12 @@ export default function Avaliacao() {
     const fetchData = async () => {
       try {
         // Fetch para PerformanceGlobal
-        const performanceResponse = await fetch('http://127.0.0.1:5000/api/global-performance');
+        const performanceResponse = await fetch('https://neuro-dashboard.onrender.com/api/global-performance');
         const performanceData = await performanceResponse.json();
         setPerformanceGlobal(performanceData.PerformanceGlobal || null);
 
         // Fetch para sessionQuestionary
-        const sessionResponse = await fetch('http://127.0.0.1:5000/api/sessionQuestionary');
+        const sessionResponse = await fetch('https://neuro-dashboard.onrender.com/api/sessionQuestionary');
         const sessionData = await sessionResponse.json();
 
         const monthlyData = {};

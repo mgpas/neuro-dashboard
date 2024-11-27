@@ -18,7 +18,7 @@ export default function Engajamento() {
         let combinedDuration = 0; // Variável para armazenar a soma das durações
 
         // Fetch sessionAvatar
-        const avatarResponse = await fetch('http://127.0.0.1:5000/api/sessionAvatar');
+        const avatarResponse = await fetch('https://neuro-dashboard.onrender.com//api/sessionAvatar');
         const sessionAvatars = await avatarResponse.json();
 
         // Process sessionAvatar data
@@ -52,7 +52,7 @@ export default function Engajamento() {
         setAvatarSegmentData(avatarChartData);
 
         // Fetch sessionMeditation
-        const meditationResponse = await fetch('http://127.0.0.1:5000/api/sessionMeditation');
+        const meditationResponse = await fetch('https://neuro-dashboard.onrender.com//api/sessionMeditation');
         const sessionMeditations = await meditationResponse.json();
 
         // Process sessionMeditation data by "category"
