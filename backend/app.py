@@ -13,7 +13,7 @@ from datetime import datetime
 load_dotenv()
 
 app = Flask(__name__)
-CORS(app)
+CORS(app, resources={r"/*": {"origins": ["https://neurobots-dashboard.onrender.com"]}})
 
 # Verificar se todas as variáveis necessárias foram carregadas
 required_vars = [
