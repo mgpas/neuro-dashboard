@@ -228,18 +228,9 @@ def calculate_game_metrics():
             # Validando e calculando erros Go/NoGo
             for entry in game_data:
                 gonogo = entry.get("gonogo", "")
-                is_correct_str = entry.get("is_correct", "true")
-                time_score_str = entry.get("time_score", "0")
-                iteration_str = entry.get("iteration", "0")
-
-                try:
-                    # Convertendo valores de string para os tipos necessários
-                    is_correct = is_correct_str.lower() == "true"
-                    time_score = float(time_score_str)
-                    iteration = int(iteration_str)
-                except ValueError as e:
-                    print(f"Erro ao converter valores na entrada: {entry}, erro: {e}")
-                    continue
+                is_correct = entry.get("isCorrect", True)  # `isCorrect` é boolean
+                time_score = entry.get("timeScore", 0)  # `timeScore` é número
+                iteration = entry.get("iteration", 0)  # `iteration` é número
 
                 if gonogo == "go":
                     total_go_count += 1
@@ -262,10 +253,11 @@ def calculate_game_metrics():
         total_time = total_iterations * 2  # Tempo total = 2 segundos por iteração
         reaction_time_average = (total_time_score / total_time * 1000) if total_time > 0 else 0
 
+        # Retornando resultados com duas casas decimais
         return {
-            "go_error_percentage": go_error_percentage,
-            "nogo_error_percentage": nogo_error_percentage,
-            "reaction_time_average_ms": reaction_time_average
+            "go_error_percentage": round(go_error_percentage, 2),
+            "nogo_error_percentage": round(nogo_error_percentage, 2),
+            "reaction_time_average_ms": round(reaction_time_average, 2)
         }
 
     except Exception as e:
