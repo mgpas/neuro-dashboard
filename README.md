@@ -1,8 +1,25 @@
-# Neuro Dashboard
+<h1 align="center"> Neuro Dashboard </h1>
+
 
 Este projeto é um **Neuro Dashboard** desenvolvido por alunos do curso de **Análise e Desenvolvimento de Sistemas**, em parceria com uma empresa do setor. O objetivo deste dashboard é fornecer uma interface intuitiva e interativa para visualização e análise de dados relacionados a modelos neurais, permitindo que usuários tomem decisões informadas com base em insights derivados dos dados.
 
-## Estrutura do Projeto
+**Acesse o nosso dashboard [aqui](https://neurobots-dashboard.onrender.com)**
+
+
+<p align="center">
+  <a href="#-estrutura">Estrutura</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
+  <a href="#-tecnologias">Tecnologias</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
+  <a href="#-requisitos">Configuração do Ambiente</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
+  <a href="#-instalação">Instalação</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
+  <a href="#-execução">Execução</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
+    <a href="#-dicas">Dicas</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
+</p>
+
+<p align="center">
+  <img alt="typing quotes game" src=".github/preview.jpg" width="100%">
+</p>
+
+## 🚧 Estrutura
 
 A estrutura do projeto é a seguinte:
 ```perl
@@ -26,23 +43,23 @@ neuro-dashboard/
 
 ```
 
-## Tecnologias Utilizadas
+## 🚀 Tecnologias
 
 - **Frontend**: React
 - **Backend**: Python (Flask)
 - **Banco de Dados**: Firebase
 - **Gerenciamento de Versões**: Node Version Manager (nvm) para Node.js
 - **Ambientes Virtuais**: venv para gerenciamento de dependências do Python
+- **Deploy:** Render
+- **Repositório e versionamento:** Git e Github
 
-## Configuração do Ambiente
-
-### Requisitos
+## 📚 Requisitos
 
 1. **Python**: Certifique-se de ter o Python instalado, a versão utilizada no projeto está dee acordo com a iniciação do venv.
 2. **Node.js**: Use a versão especificada no arquivo `.nvmrc` (18.17.0).
 3. **nvm**: Instale o Node Version Manager para facilitar a gestão de versões do Node.js.
 
-## Instalação
+## 🔧 Instalação
 
 Clone o repositório:
 
@@ -92,7 +109,7 @@ Clone o repositório:
     npm install
     ```
 
-## Executando o Projeto
+## 💻 Execução
 ### Backend
 Para iniciar o backend, execute:
 
@@ -105,6 +122,7 @@ Para iniciar o frontend, execute:
     cd frontend/my-dashboard
     npm start
 
-### Dicas Finais
+## 💡 Dicas
 - Lembre-se de inserir os arquivos .env no local indicado.
-- Para as requisições de dados funcionarem adequadamente os servidores do back e front devem estar funcionando. Divida ou então abra mais de um terminal.
+- Para as requisições de dados funcionarem adequadamente os servidores do back e front devem estar funcionando.
+- Com o deploy, a url que está hospedando o site foi passada no CORS limitando as requisições para esse caminho, isso pode gerar erros ao executar localmente. Acesse o dashboard [aqui](https://neurobots-dashboard.onrender.com)
