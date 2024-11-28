@@ -15,10 +15,6 @@ Este projeto é um **Neuro Dashboard** desenvolvido por alunos do curso de **An�
     <a href="#-dicas">Dicas</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
 </p>
 
-<p align="center">
-  <img alt="typing quotes game" src=".github/preview.jpg" width="100%">
-</p>
-
 ## 🚧 Estrutura
 
 A estrutura do projeto é a seguinte:
